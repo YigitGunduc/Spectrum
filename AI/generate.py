@@ -36,7 +36,7 @@ def create_model(vocab_size, embed_dim, rnn_neurons, batch_size):
 
 model = create_model(vocab_size, embed_dim, rnn_neurons, batch_size=1)
 
-model.load_weights('shakespeare_gen.h5')
+model.load_weights('model.h5')
 
 model.build(tf.TensorShape([1, None]))
 
