@@ -23,12 +23,11 @@ ind_to_char = np.array(vocab)
 def sparse_cat_loss(y_true,y_pred):
   return sparse_categorical_crossentropy(y_true, y_pred, from_logits=True)
 
+
 def create_model(vocab_size, embed_dim, rnn_neurons, batch_size):
     model = Sequential()
     model.add(Embedding(vocab_size, embed_dim,batch_input_shape=[batch_size, None]))
-    model.add(GRU(512,return_sequences=True,stateful=True,recurrent_initializer='glorot_uniform'))
-    model.add(GRU(256,return_sequences=True,stateful=True,recurrent_initializer='glorot_uniform'))
-    model.add(GRU(64,return_sequences=True,stateful=True,recurrent_initializer='glorot_uniform'))
+    model.add(GRU(rnn_neurons,return_sequences=True,stateful=True,recurrent_initializer='glorot_uniform'))
     # Final Dense Layer to Predict
     model.add(Dense(vocab_size))
     model.compile(optimizer='adam', loss=sparse_cat_loss) 
@@ -36,7 +35,7 @@ def create_model(vocab_size, embed_dim, rnn_neurons, batch_size):
 
 model = create_model(vocab_size, embed_dim, rnn_neurons, batch_size=1)
 
-model.load_weights('model.h5')
+model.load_weights('shakespeare_gen.h5')
 
 model.build(tf.TensorShape([1, None]))
 
@@ -59,5 +58,12 @@ def generate_text(model, start_seed,gen_size=100,temp=1.0):
       text_generated.append(ind_to_char[predicted_id])
   return (start_seed + ''.join(text_generated))
 
-print(generate_text(model,"KING",gen_size=1000))
-
+import time as t
+t1 = t.time()
+print('--------------------------------------------------')
+print(generate_text(model,"We don't like to do too much explaining",gen_size=1000))
+t2 = t.time()
+print('--------------------------------------------------')
+print(t2 - t1)
+print('--------------------------------------------------')
+print('done')
