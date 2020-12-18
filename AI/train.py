@@ -39,8 +39,8 @@ rnn_neurons = 1026 # number of neurans of out rnn units
 
 batch_size = 128 # batch_size
 buffer_size = 10000 # buffer_size
-epochs = 5 # num of epochs to train 
-seq_len = 120 # seq_len
+epochs = 4 # num of epochs to train 
+seq_len = 160 # seq_len
 
 char_to_ind = {u:i for i, u in enumerate(vocab)}
 ind_to_char = np.array(vocab)
@@ -50,9 +50,6 @@ encoded_text = np.array([char_to_ind[c] for c in text])
 total_num_seq = len(text)//(seq_len+1)
 
 char_dataset = tf.data.Dataset.from_tensor_slices(encoded_text)
-
-for i in char_dataset.take(500):
-     print(ind_to_char[i.numpy()])
 
 sequences = char_dataset.batch(seq_len+1, drop_remainder=True)
 
@@ -64,14 +61,6 @@ def create_seq_targets(seq):
 
 dataset = sequences.map(create_seq_targets)
 
-
-for input_txt, target_txt in  dataset.take(1):
-    print(input_txt.numpy())
-    print(''.join(ind_to_char[input_txt.numpy()]))
-    print('\n')
-    print(target_txt.numpy())
-    print(''.join(ind_to_char[target_txt.numpy()]))
-
 dataset = dataset.shuffle(buffer_size).batch(batch_size, drop_remainder=True)
 
 
@@ -81,9 +70,7 @@ def sparse_cat_loss(y_true,y_pred):
 def create_model(vocab_size, embed_dim, rnn_neurons, batch_size):
     model = Sequential()
     model.add(Embedding(vocab_size, embed_dim,batch_input_shape=[batch_size, None]))
-    model.add(GRU(512,return_sequences=True,stateful=True,recurrent_initializer='glorot_uniform'))
-    model.add(GRU(256,return_sequences=True,stateful=True,recurrent_initializer='glorot_uniform'))
-    model.add(GRU(64,return_sequences=True,stateful=True,recurrent_initializer='glorot_uniform'))
+    model.add(GRU(rnn_neurons,return_sequences=True,stateful=True,recurrent_initializer='glorot_uniform'))
     # Final Dense Layer to Predict
     model.add(Dense(vocab_size))
     model.compile(optimizer='adam', loss=sparse_cat_loss) 
@@ -98,10 +85,8 @@ model = create_model(
 
 model.summary()
 
-for i in range(epochs):
-  model.fit(dataset,epochs=1)
-  if i % 10 == 0:
-    model.save(f'model-{i}epochs.h5')
+model.fit(dataset,epochs=epochs)
+
 model.save('shakespeare_gen.h5') 
 
 model = create_model(vocab_size, embed_dim, rnn_neurons, batch_size=1)
@@ -129,4 +114,9 @@ def generate_text(model, start_seed,gen_size=100,temp=1.0):
       text_generated.append(ind_to_char[predicted_id])
   return (start_seed + ''.join(text_generated))
 
+import time as t
+t1 = t.time()
 print(generate_text(model,"We don't like to do too much explaining",gen_size=1000))
+t2 = t.time()
+print(t2 - t1)
+print('done')
