@@ -39,8 +39,8 @@ rnn_neurons = 1026 # number of neurans of out rnn units
 
 batch_size = 128 # batch_size
 buffer_size = 10000 # buffer_size
-epochs = 4 # num of epochs to train 
-seq_len = 160 # seq_len
+epochs = 9 # num of epochs to train 
+seq_len = 120 # seq_len
 
 char_to_ind = {u:i for i, u in enumerate(vocab)}
 ind_to_char = np.array(vocab)
@@ -85,13 +85,19 @@ model = create_model(
 
 model.summary()
 
-model.fit(dataset,epochs=epochs)
 
-model.save('shakespeare_gen.h5') 
+for i in range(epochs):
+  print(i)
+  model.fit(dataset,epochs=1)
+  if i % 3 ==0:
+    model.save(f'model-{i}-epochs.h5') 
+    print('model has been saved')
+
+model.save('finalmodel.h5') 
 
 model = create_model(vocab_size, embed_dim, rnn_neurons, batch_size=1)
 
-model.load_weights('shakespeare_gen.h5')
+model.load_weights('finalmodel.h5')
 
 model.build(tf.TensorShape([1, None]))
 
