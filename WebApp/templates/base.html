@@ -8,12 +8,13 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Generate - Spectrum</title>
+  <title>{% block title %}{% endblock %} - Spectrum</title>
+
 
   <!-- Bootstrap core CSS -->
-  <link href="{{ url_for('static', filename='static/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
   <!-- Custom styles for this template -->
-  <link href="{{ url_for('static', filename='static/css/scrolling-nav.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/scrolling-nav.css') }}" rel="stylesheet">
 
 </head>
 
@@ -42,25 +43,9 @@
     </div>
   </nav>
 
-  <header class="bg-primary text-white" style="background-image: url(/static/colourful-background-with-graphic-equaliser-design_1048-11126.jpg);background-repeat: no-repeat;background-size: 100% 100%; " >
-    <div class="container text-center">
+{% block content %}
 
-      <h1>Spectrum</h1>
-      <p class="lead">AI that generates Rap and Hip-hop song lyrics</p>
-    </div>
-    <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-          <form method="post">
-            <div class="form-row">
-              <div class="col-12 col-md-9 mb-2 mb-md-0">
-                <input type="text" name="nm" class="form-control form-control-lg" placeholder="Seed text...">
-              </div>
-              <div class="col-12 col-md-3">
-                <button type="submit" value="submit" class="btn btn-block btn-lg btn-info">Generate</button>
-              </div>
-            </div>
-          </form>
-        </div>
-  </header>
+{% endblock %}
 
   <section id="about">
     <div class="container">
@@ -104,7 +89,8 @@
   <!-- Footer -->
   <footer class="py-5 bg-dark">
     <div class="container">
-      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2020</p>
+      <p class="m-0 text-center text-white">see source Code and more at <a href="https://github.com/YigitGunduc/Spectrum">GitHub</a></p>
+      <p class="m-0 text-center text-white">Copyright &copy; Yiğit Gündüç 2020 </p>
     </div>
     <!-- /.container -->
   </footer>
