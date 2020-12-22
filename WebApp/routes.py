@@ -1,15 +1,5 @@
 from flask import Flask, redirect, url_for, render_template, request, jsonify
 from generate import *
-import string
-import time as t
-import numpy as np
-import pandas as pd
-import tensorflow as tf
-from   tensorflow.keras.models import load_model
-from   tensorflow.keras.models import Sequential
-from   tensorflow.keras.losses import sparse_categorical_crossentropy
-from   tensorflow.keras.layers import LSTM,Dense,Embedding,Dropout,GRU
-
 
 app = Flask(__name__)
 
