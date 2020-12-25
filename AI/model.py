@@ -26,7 +26,7 @@ class Generator():
     def _sparse_cat_loss(self, y_true, y_pred):
         return sparse_categorical_crossentropy(y_true, y_pred, from_logits=True)
 
-    def load_weights(self, weight_file_path):
+    def load_weights(self, weight_file_path,mode = 'predictions'):
         '''
         
         Constructs the model and loads the weights 
@@ -38,10 +38,15 @@ class Generator():
                 None
         '''
         if os.path.exists(weight_file_path):
-            self._createModel(batch_size = 1)
-            self.model.load_weights(weight_file_path)
-            self.model.build(tf.TensorShape([1, None]))
-
+            if mode == 'predictions':
+                self._createModel(batch_size = 1)
+                self.model.load_weights(weight_file_path)
+                self.model.build(tf.TensorShape([1, None]))
+            elif mode == 'training':
+                self._createModel(batch_size = 128)
+                self.model.load_weights(weight_file_path)
+                self.model.build(tf.TensorShape([1, None]))
+    
     def train(self, data, epochs=1, verbose=1, save_at=5):
         '''
         
@@ -55,12 +60,12 @@ class Generator():
                 None
         '''
         self._createModel(batch_size = 128)
-        for epoch in range(epochs):
+        for epoch in range(1, epochs + 1):
             print(f'Epoch {epoch}/{epochs}')
             self.model.fit(data, epochs=1,verbose=verbose)
             
-            if (epoch + 1) % save_at == 0:
-                self.model.save(f'model-{epoch + 1}-epochs.h5')
+            if epoch % save_at == 0:
+                self.model.save(f'model-{epoch}-epochs.h5')
 
     def predict(self, start_seed, gen_size=100, temp=1.0):
         '''
@@ -105,6 +110,15 @@ class Generator():
             model.train(dataset,epochs = 5, verbose=1, save_at=1) # training the model
             ----------------------------------------------------
             
+            Continue training from a saved weights file : 
+
+            model = Generator() # creating an instance of model
+            
+            model.load_weights('model-3-epochs.h5', mode = 'training') # loading the weights
+
+            model.train(dataset,epochs = 5, verbose=1, save_at=1) # training the model
+            -----------------------------------------------------
+
             Preditction example :
 
             model = Generator() # creating an instance of model
