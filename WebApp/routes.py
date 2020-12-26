@@ -1,5 +1,10 @@
 from flask import Flask, redirect, url_for, render_template, request, jsonify
-from generate import *
+from model import Generator
+
+
+model = Generator()
+
+model.load_weights('model-0-epochs.h5', mode = 'predition')
 
 app = Flask(__name__)
 
@@ -7,7 +12,7 @@ app = Flask(__name__)
 def index():
     if request.method == "POST":
         seed = request.form["nm"]
-        generatedText = generate_text(model, seed,gen_size=700,temp=1.0)
+        generatedText = model.predict(start_seed=seed, gen_size=1000, temp=1.0)
         if len(seed) != 0:
         	return redirect(f"/generate/{generatedText}")
         else:
