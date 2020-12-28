@@ -10,7 +10,7 @@
 
   <title>{% block title %}{% endblock %} - Spectrum</title>
 
-
+  <link rel="icon" href="https://static.thenounproject.com/png/2446816-200.png">
   <!-- Bootstrap core CSS -->
   <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
   <!-- Custom styles for this template -->
@@ -47,14 +47,23 @@
 
 {% endblock %}
 
+  <section id='how-to-use' class="bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <h2>How-to-use</h2>
+          <p class="lead">To generate text with Spectrum first thing you must do is pick a seed text, seed text might be anything a word, sentence, or a paragraph something you believe will make sense to AI after that you can press the generate button and see AI's prediction about your seed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="about">
     <div class="container">
       <div class="row">
         <div class="col-lg-8 mx-auto">
           <h2>About Spectrum</h2>
-          <p class="lead">Spectrum is an AI that uses deep learning to generate rap song lyrics you can see the live demo from your browser type a seed text and generate rap songs around 1000 characters. If you want to know how to use the web app you can check out the how-to-use section below.</p>
-          <h3>how to use webapp</h3>
-          <p>Spectrum is an AI that uses deep learning to generate rap song lyrics you can see the live demo from your browser type a seed text and generate rap songs around 1000 characters. If you want to know how to use the web app you can check out the how-to-use section below.</p>
+          <p class="lead">Spectrum is an AI that uses deep learning to generate rap song lyrics you can see the live demo from your browser type a seed text and generate rap songs around 1000 characters. If you want to know how to use the web app you can check out the how-to-use section above.</p>
 
           <h3>Spectrum is built with</h3>
           <ul>
@@ -72,8 +81,8 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8 mx-auto">
-          <h2>Api</h2>
-          <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut optio velit inventore, expedita quo laboriosam possimus ea consequatur vitae, doloribus consequuntur ex. Nemo assumenda laborum vel, labore ut velit dignissimos.</p>
+          <h2>API</h2>
+          <p class="lead">Spectrum has a free web API to learn about example API request, sample response and more you can check out the Github repo</p>
         </div>
       </div>
     </div>
@@ -93,9 +102,10 @@
 
   <!-- Footer -->
   <footer class="py-5 bg-dark">
-    <div class="container">
-      <p class="m-0 text-center text-white">see source Code and more at <a href="https://github.com/YigitGunduc/Spectrum">GitHub</a></p>
-      <p class="m-0 text-center text-white">Copyright &copy; Yiğit Gündüç 2020 </p>
+    <div class="container text-center">
+                  <p class="text-warning">PLEASE NOTE - Spectrum learns from existing rap lyrics - things it says may seem inappropriate - use with discretion and at YOUR OWN RISK</p>
+            <p class="text-danger">PARENTAL ADVICE - whatever it says, visitors never talk to a human - the AI knows many topics - use ONLY WITH OVERSIGHT</p>
+      <p class="m-0 text-center text-white">See source Code and Docs at <a href="https://github.com/YigitGunduc/Spectrum">GitHub</a> Copyright &copy; Yiğit Gündüç 2020 - 2021 </p>
     </div>
     <!-- /.container -->
   </footer>
