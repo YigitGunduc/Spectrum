@@ -3,7 +3,7 @@ from WebApp.model import Generator
 
 model = Generator()
 
-model.load_weights('model-1-epochs-256-neurons.h5')
+model.load_weights('../models/model-5-epochs-256-neurons.h5')
 
 
 app = Flask(__name__)

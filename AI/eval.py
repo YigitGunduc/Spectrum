@@ -7,8 +7,9 @@ seed = sys.argv[1]
 model = Generator()
 
 # loading weights
-model.load_weights('model-1-epochs-256-neurons.h5')
+model.load_weights('../models/model-5-epochs-256-neurons.h5')
 
+print('=======================Generated Text=======================')
 # making preditions
 generatedText = model.predict(start_seed=seed, gen_size=1000, temp=1.0)
 
