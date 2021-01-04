@@ -15,7 +15,7 @@
     Spectrum is an AI that uses deep learning to generate rap song lyrics.
     <br />
     <br />
-    <a href="https://github.com/YigitGunduc/Spectrum">View Demo</a>
+    <a href="https://spectrumapp.herokuapp.com/">View Demo</a>
     <br />
     <a href="https://github.com/YigitGunduc/Spectrum/issues">Report Bug</a>
     <br />
@@ -74,7 +74,7 @@ Call eval.py from the command line with seed text as an argument
 python3 eval.py SEEDTEXT 
 ```
 
-### API
+### API - APIs are not active due to the lack of computational resources
 spectrum has a free web API you can send request to it as shown below
 
 ```python
