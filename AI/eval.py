@@ -3,14 +3,12 @@ from model import Generator
 
 seed = sys.argv[1]
 
-# creating a new instance of model
-model = Generator()
+model = Generator()  # initializing the model
 
-# loading weights
-model.load_weights('../models/model-5-epochs-256-neurons.h5')
+model.load_weights('../models/model-5-epochs-256-neurons.h5')  # loading weights
 
 print('=======================Generated Text=======================')
-# making preditions
-generatedText = model.predict(start_seed=seed, gen_size=1000, temp=1.0)
+
+generatedText = model.predict(start_seed=seed, gen_size=1000)  # making preditions
 
 print(generatedText)
