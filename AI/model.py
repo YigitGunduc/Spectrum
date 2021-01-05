@@ -1,19 +1,20 @@
 import os
 import string
+import random
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM,Dense,Embedding,Dropout,GRU
+from tensorflow.keras.layers import Dense, Embedding, GRU
 from tensorflow.keras.losses import sparse_categorical_crossentropy
 from tensorflow.keras.models import load_model
 
 
-vocab = sorted(set(string.printable)) # variety of characters
-
-char_to_ind = {u:i for i, u in enumerate(vocab)}             
+vocab = sorted(set(string.printable))
+char_to_ind = {u: i for i, u in enumerate(vocab)}             
 ind_to_char = np.array(vocab)
 
-class Generator():
+
+class Generator(object):
 
     def __init__(self):
         self.model = None
@@ -51,8 +52,8 @@ class Generator():
 
     def train(self, data, epochs=1, verbose=1, save_at=5):
         '''
-        
-        Trains the model for a given number of epochs 
+
+        Trains the model for a given number of epochs
         Parameters:
                 epochs (int) : number of epochs to train on
                 verbose (bool) : to print loss and epoch number of not to
@@ -61,16 +62,16 @@ class Generator():
                 None
         '''
         self._createModel(batch_size = 128)
-        for epoch in range(epochs):
+        for epoch in range(1, epochs + 1):
             print(f'Epoch {epoch}/{epochs}')
-            self.model.fit(data, epochs=1,verbose=verbose)
+            self.model.fit(data, epochs=1, verbose=verbose)
 
             if (epoch + 1) % save_at == 0:
-                self.model.save(f'model-{epoch + 1}-epochs-{self.rnn_neurons}-neurons.h5')
+                self.model.save(f'model-{epoch}-epochs-{self.rnn_neurons}-neurons.h5')
 
-    def predict(self, start_seed, gen_size=100, temp=1.0):
+    def predict(self, start_seed, gen_size=100, temp=random.uniform(0, 1)):
         '''
-        
+
         Generates further texts according to the seed text
         Parameters:
                 start_seed (str) : seed that model will use to generate further texts
@@ -78,6 +79,9 @@ class Generator():
         Returns:
                 None
         '''
+        if self.model is None:
+            raise ValueError('Model Object cannot be NoneType')
+
         num_generate = gen_size
         input_eval = [char_to_ind[s] for s in start_seed]
         input_eval = tf.expand_dims(input_eval, 0)
@@ -85,11 +89,41 @@ class Generator():
         temperature = temp
         self.model.reset_states()
 
-        for i in range(num_generate):
-          predictions = self.model(input_eval)
-          predictions = tf.squeeze(predictions, 0)
-          predictions = predictions / temperature
-          predicted_id = tf.random.categorical(predictions, num_samples=1)[-1,0].numpy()
-          input_eval = tf.expand_dims([predicted_id], 0)
-          text_generated.append(ind_to_char[predicted_id])
+        for _ in range(num_generate):
+            predictions = self.model(input_eval)
+            predictions = tf.squeeze(predictions, 0)
+            predictions = predictions / temperature
+            predicted_id = tf.random.categorical(predictions, num_samples=1)[-1, 0].numpy()
+            input_eval = tf.expand_dims([predicted_id], 0)
+            text_generated.append(ind_to_char[predicted_id])
         return (start_seed + ''.join(text_generated))
+
+    @property
+    def __doc__(self):
+        return '''
+
+            Generator object can construct the model,
+            save the weights, load the weights train the model,
+            and make predictions
+
+            ---------------------------------------------------
+
+            Trainging example :
+            model = Generator() # creating an instance of model
+            model.train(dataset, epochs = 5, verbose=1, save_at=1) # training the model
+            ----------------------------------------------------
+
+            Continue training from a saved weights file :
+            model = Generator() # creating an instance of model
+
+            model.load_weights('model-3-epochs.h5', mode = 'training') # loading the weights
+            model.train(dataset, epochs = 5, verbose=1, save_at=1) # training the model
+            -----------------------------------------------------
+
+            Preditction example :
+            model = Generator() # creating an instance of model
+            model.load_weights('model-10-epochs.h5') # loading the weights
+
+            print(model.predict('hello')) # making prediction and printing
+            -----------------------------------------------------
+            '''

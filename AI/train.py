@@ -1,20 +1,15 @@
 import re
 import string
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM,Dense,Embedding,Dropout,GRU
-from tensorflow.keras.losses import sparse_categorical_crossentropy
 from tensorflow.keras.models import load_model
 from model import Generator
 
-path_to_file = 'raplyrics.txt' # text dataset path
+path_to_file = '../data/raplyrics.txt' # text dataset path
 
 text = open(path_to_file, 'r').read() # loading text dataset
 
-text = re.sub(r'[^\x00-\x7f]',r'', text) # removing non ascii characters
+text = re.sub(r'[^\x00-\x7f]', r'', text) # removing non ascii characters
 
 # removing escape characters
 text = text.replace('\x10', ' ') 
@@ -31,16 +26,12 @@ text = text.replace('\x0e', ' ')
 # constants variables
 # ------------------------------------------------------------
 vocab = sorted(set(string.printable)) # variety of characters
-vocab_size = len(vocab) # num of items in the vocab          |
-embed_dim = 64 # embeding dim size                           
-rnn_neurons = 1026 # number of neurans of out rnn units      
-                                                             
+vocab_size = len(vocab) # num of items in the vocab          |                      
 batch_size = 128 # batch_size                                
-buffer_size = 10000 # buffer_size                            
-epochs = 30 # num of epochs to train                         
+buffer_size = 10000 # buffer_size                       
 seq_len = 120 # seq_len                                      
                                                  
-char_to_ind = {u:i for i, u in enumerate(vocab)}             
+char_to_ind = {u: i for i, u in enumerate(vocab)}             
 ind_to_char = np.array(vocab)
 encoded_text = np.array([char_to_ind[c] for c in text])
 # ------------------------------------------------------------
@@ -69,5 +60,5 @@ dataset = dataset.shuffle(buffer_size).batch(batch_size, drop_remainder=True)
 model = Generator() # creating an instance of model
 
 # training the model
-model.train(dataset,epochs = 5, verbose=1, save_at=1)
+model.train(dataset, epochs=30, verbose=1, save_at=5)
 # ------------------------------------------------------------
