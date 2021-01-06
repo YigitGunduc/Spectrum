@@ -1,9 +1,21 @@
 import re
 import string
+import argparse
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 from model import Generator
+
+
+# getting arguments
+# ------------------------------------------------------------
+parser = argparse.ArgumentParser(description="training Rap lyrics generator")
+parser.add_argument('--epochs', type=int, default=100, help='epoch size')
+parser.add_argument('--save_at', type=int, default=5, help='to save at ever n th epoch')
+parser.add_argument('--verbose', type=int, default=1, required=False, help='to print loss and epoch number of not to')
+
+args = parser.parse_args()
+# ------------------------------------------------------------
 
 path_to_file = '../data/raplyrics.txt' # text dataset path
 
@@ -60,5 +72,6 @@ dataset = dataset.shuffle(buffer_size).batch(batch_size, drop_remainder=True)
 model = Generator() # creating an instance of model
 
 # training the model
-model.train(dataset, epochs=30, verbose=1, save_at=5)
+model.train(dataset, epochs=args.epochs, verbose=args.verbose, save_at=args.save_at)
 # ------------------------------------------------------------
+
