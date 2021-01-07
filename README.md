@@ -76,7 +76,7 @@ generatedText = model.predict(start_seed=SEED, gen_size=1000)
 print(generatedText)
 ```
 
-### Running the Web-App
+### Running the Web-App Locally
 
 ```sh
 # navigate to the Spectrum folder 
@@ -88,13 +88,13 @@ python3 app.py
 # check out http://0.0.0.0:5000
 ```
 
-### API - APIs are not active due to the lack of computational resources
+### API
 spectrum has a free web API you can send request to it as shown below
 
 ```python
 import requests 
 
-response = requests.get("http://spectrum.herokuapp.com/api/generate/SEEDTEXT")
+response = requests.get("https://spectrumapp.herokuapp.com/api/generate/SEEDTEXT")
 #raw response
 print(response.json())
 #cleaned up response
