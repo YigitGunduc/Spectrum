@@ -3,6 +3,7 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/13k-AfkOVw_8zcKEsrr-dRNLX0E9M4wOa?usp=sharing)
 
 
 <!-- PROJECT LOGO -->
@@ -20,6 +21,8 @@
     <a href="https://github.com/YigitGunduc/Spectrum/issues">Report Bug</a>
     <br />
     <a href="https://github.com/YigitGunduc/Spectrum/issues">Request Feature</a>
+    <br />
+    <a href="https://colab.research.google.com/drive/13k-AfkOVw_8zcKEsrr-dRNLX0E9M4wOa?usp=sharing">Open In Colab</a>
   </p>
 </p>
 
@@ -56,7 +59,7 @@ pip install -r requirements.txt
 cd Spectrum/AI
 
 # pass verbose, epochs, save_at arguments and run train.py 
-python3 train.py --epochs EPOCHS -- verbose VERBOSE --save_at SAVEAT
+python3 train.py --epochs EPOCHS --verbose VERBOSE --save_at SAVEAT
 ```
 ### Generating Text from Trained Model
 Call eval.py from the command line with seed text as an argument
@@ -85,7 +88,7 @@ cd Spectrum
 # run app.py
 python3 app.py
 
-# check out http://0.0.0.0:5000
+# check out http://0.0.0.0:8080
 ```
 
 ### API
@@ -105,11 +108,11 @@ print(response.json()["lyrics"])
 ```
 epochs = 30 
 batch size = 128
-number of layers = 2 + 1
+number of layers = 2(hidden) + 1(output)
 number of RNN units = 256
 dropout prob = 0.3
 embedding dimensions = 64
-optimizer = adam
+optimizer = Adam
 loss = sparse categorical crossentropy
 ```
 These hyperparameters are the best that I can found but you have to be careful while dealing with the hyperparameters because this model can over or underfit quite easily and GRUs performs better than LSTMs
