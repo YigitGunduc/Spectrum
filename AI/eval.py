@@ -10,7 +10,6 @@ model = Generator()  # initializing the model
 
 model.load_weights('../models/model-5-epochs-256-neurons.h5')  # loading weights
 
-model.hyperparams()
 print('=======================Generated Text=======================')
 
 generatedText = model.predict(start_seed=args.seed, gen_size=1000)  # making preditions
