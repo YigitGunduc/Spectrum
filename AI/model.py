@@ -1,14 +1,13 @@
 import os
 import string
 import random
-import tabulate
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Embedding, GRU
 from tensorflow.keras.losses import sparse_categorical_crossentropy
 from tensorflow.keras.models import load_model
-
+from matplotlib import pyplot as plt
 
 vocab = sorted(set(string.printable))
 char_to_ind = {u: i for i, u in enumerate(vocab)}             
@@ -17,20 +16,21 @@ ind_to_char = np.array(vocab)
 
 class Generator(object):
 
-    def __init__(self):
+    def __init__(self, rnn_neurons=256, embed_dim=64, dropout=0.3, num_layers=2, learning_rate=1e-4):
         self.model = None
         self.vocab = sorted(set(string.printable))
         self.vocab_size = len(self.vocab)
-        self.hparams = {'rnn_neurons' : 256, 
-                        'embed_dim' : 64,
-                        'learning_rate' : 1e-4,
-                        'dropout' : 0.3}
+        self.hparams = {'rnn_neurons' : rnn_neurons, 
+                        'embed_dim' : embed_dim,
+                        'learning_rate' : learning_rate,
+                        'dropout' : dropout,
+                        'num_layers' : num_layers}
 
     def _createModel(self, batch_size):
         model = Sequential()
         model.add(Embedding(self.vocab_size, self.hparams['embed_dim'],batch_input_shape=[batch_size, None]))
-        model.add(GRU(self.hparams['rnn_neurons'] ,return_sequences=True, stateful=True, recurrent_initializer='glorot_uniform', dropout=self.hparams['dropout']))
-        model.add(GRU(self.hparams['rnn_neurons'] ,return_sequences=True, stateful=True, recurrent_initializer='glorot_uniform', dropout=self.hparams['dropout']))
+        for _ in range(self.hparams['num_layers']):
+            model.add(GRU(self.hparams['rnn_neurons'] ,return_sequences=True, stateful=True, recurrent_initializer='glorot_uniform', dropout=self.hparams['dropout']))
         model.add(Dense(self.vocab_size))
         opt = tf.keras.optimizers.Adam(learning_rate=self.hparams['learning_rate'])
         model.compile(optimizer=opt, loss=self._sparse_cat_loss)
@@ -72,8 +72,9 @@ class Generator(object):
             print(f'Epoch {epoch}/{epochs}')
             self.model.fit(data, epochs=1, verbose=verbose)
 
+            rnnNeurons=self.hparams['rnn_neurons']
             if (epoch + 1) % save_at == 0:
-                self.model.save(f'model-{epoch}-epochs-256-neurons.h5')
+                self.model.save(f'model-{epoch}-epochs-{rnnNeurons}-neurons.h5')
 
     def predict(self, start_seed, gen_size=100, temp=random.uniform(0, 1)):
         '''
@@ -87,6 +88,10 @@ class Generator(object):
         '''
         if self.model is None:
             raise ValueError('Model Object cannot be NoneType')
+
+        self.model.save_weights('model_weights.h5')
+        self.load_weights('model_weights.h5')
+        os.remove('model_weights.h5')
 
         num_generate = gen_size
         input_eval = [char_to_ind[s] for s in start_seed]
@@ -104,6 +109,15 @@ class Generator(object):
             text_generated.append(ind_to_char[predicted_id])
         return (start_seed + ''.join(text_generated))
     
+    def history(self):
+        plt.plot(self.model.history['mean_squared_error'], label='MSE (training data)')
+        plt.plot(self.model.history['val_mean_squared_error'], label='MSE (validation data)')
+        plt.title('MSE for Chennai Reservoir Levels')
+        plt.ylabel('MSE value')
+        plt.xlabel('No. epoch')
+        plt.legend(loc="upper left")
+        plt.show()
+
     def hyperparams(self):
         print('Hyper Parameters')
         print('+--------------------------+')
