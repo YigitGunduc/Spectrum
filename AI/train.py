@@ -62,14 +62,20 @@ if __name__ == '__main__':
     parser.add_argument('--epochs', type=int, default=100, help='epoch size')
     parser.add_argument('--save_at', type=int, default=5, help='to save at ever n th epoch')
     parser.add_argument('--verbose', type=int, default=1, required=False, help='to print loss and epoch number of not to')
+    parser.add_argument('--rnn_neurons', type=int, default=256, help='rnn neurons in every single layer')
+    parser.add_argument('--embed_dim', type=int, default=64, help='dims for embedding layer')
+    parser.add_argument('--dropout', type=float, default=0.3, required=False, help='keep prob for dropout')
+    parser.add_argument('--num_layers', type=int, default=2, help='number of rnn layers')
+    parser.add_argument('--learning_rate', type=float, default=1e-4, help='learning_rate')
 
     args = parser.parse_args()
 
     # Training the model
     # ------------------------------------------------------------
-    model = Generator() # creating an instance of model
+    model = Generator(rnn_neurons=args.rnn_neurons, embed_dim=args.embed_dim, dropout=args.dropout, num_layers=args.num_layers, learning_rate=args.learning_rate) # creating an instance of model
 
     # training the model
     model.train(dataset, epochs=args.epochs, verbose=args.verbose, save_at=args.save_at)
     # ------------------------------------------------------------
-
+    pred = model.predict('hello')
+    print(pred)
