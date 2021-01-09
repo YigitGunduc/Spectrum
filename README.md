@@ -59,8 +59,11 @@ pip install -r requirements.txt
 cd Spectrum/AI
 
 # pass verbose, epochs, save_at arguments and run train.py 
-python3 train.py --epochs EPOCHS --verbose VERBOSE --save_at SAVEAT
+python3 train.py -h, --help  --epochs EPOCHS --save_at SAVE_AT --verbose VERBOSE --rnn_neurons RNN_NEURONS
+                 --embed_dim EMBED_DIM --dropout DROPOUT --num_layers NUM_LAYERS --learning_rate LEARNING_RATE
 ```
+All the arguments are optional if you leave them empty model will construct itself with the default params
+
 ### Generating Text from Trained Model
 Call eval.py from the command line with seed text as an argument
 ```sh
@@ -78,6 +81,7 @@ generatedText = model.predict(start_seed=SEED, gen_size=1000)
 
 print(generatedText)
 ```
+* If you have tweaked the model's parameters while training initialize the model with the parameters you trained
 
 ### Running the Web-App Locally
 
@@ -147,6 +151,7 @@ Hyper Parameters
 |embed_dim     |         64|
 |learning_rate |     0.0001|
 |dropout       |        0.3|
+|num_layers    |          2|
 +--------------------------+
 >>>
 ```
