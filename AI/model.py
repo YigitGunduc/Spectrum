@@ -109,15 +109,6 @@ class Generator(object):
             text_generated.append(ind_to_char[predicted_id])
         return (start_seed + ''.join(text_generated))
     
-    def history(self):
-        plt.plot(self.model.history['mean_squared_error'], label='MSE (training data)')
-        plt.plot(self.model.history['val_mean_squared_error'], label='MSE (validation data)')
-        plt.title('MSE for Chennai Reservoir Levels')
-        plt.ylabel('MSE value')
-        plt.xlabel('No. epoch')
-        plt.legend(loc="upper left")
-        plt.show()
-
     def hyperparams(self):
         print('Hyper Parameters')
         print('+--------------------------+')
