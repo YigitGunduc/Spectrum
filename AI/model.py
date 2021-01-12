@@ -56,7 +56,7 @@ class Generator(object):
         else:
             raise FileNotFoundError
 
-    def train(self, data, epochs=1, verbose=1, save_at=5):
+    def train(self, data, epochs=1, verbose=1, save_at=5, cuda=False):
         '''
 
         Trains the model for a given number of epochs
@@ -68,13 +68,30 @@ class Generator(object):
                 None
         '''
         self._createModel(batch_size = 128)
-        for epoch in range(1, epochs + 1):
-            print(f'Epoch {epoch}/{epochs}')
-            self.model.fit(data, epochs=1, verbose=verbose)
+        
+        if cuda:
+            device_name = tf.test.gpu_device_name()
+            if device_name != '/device:GPU:0':
+                raise SystemError('GPU device not found')
+            print('Found GPU at: {}'.format(device_name))
+            
+            with tf.device('/device:GPU:0'):
+                for epoch in range(1, epochs + 1):
+                    print(f'Epoch {epoch}/{epochs}')
+                    self.model.fit(data, epochs=1, verbose=verbose)
 
-            rnnNeurons=self.hparams['rnn_neurons']
-            if (epoch + 1) % save_at == 0:
-                self.model.save(f'model-{epoch}-epochs-{rnnNeurons}-neurons.h5')
+                    rnnNeurons=self.hparams['rnn_neurons']
+                    if (epoch + 1) % save_at == 0:
+                        self.model.save(f'model-{epoch}-epochs-{rnnNeurons}-neurons.h5')
+
+        else:
+            for epoch in range(1, epochs + 1):
+                print(f'Epoch {epoch}/{epochs}')
+                self.model.fit(data, epochs=1, verbose=verbose)
+
+                rnnNeurons=self.hparams['rnn_neurons']
+                if (epoch + 1) % save_at == 0:
+                    self.model.save(f'model-{epoch}-epochs-{rnnNeurons}-neurons.h5')
 
     def predict(self, start_seed, gen_size=100, temp=random.uniform(0, 1)):
         '''
