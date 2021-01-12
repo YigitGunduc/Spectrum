@@ -67,6 +67,7 @@ if __name__ == '__main__':
     parser.add_argument('--dropout', type=float, default=0.3, required=False, help='keep prob for dropout')
     parser.add_argument('--num_layers', type=int, default=2, help='number of rnn layers')
     parser.add_argument('--learning_rate', type=float, default=1e-4, help='learning_rate')
+    parser.add_argument('--cuda', type=bool, default=False, help='if true uses GPU acceleration')
 
     args = parser.parse_args()
 
@@ -75,7 +76,7 @@ if __name__ == '__main__':
     model = Generator(rnn_neurons=args.rnn_neurons, embed_dim=args.embed_dim, dropout=args.dropout, num_layers=args.num_layers, learning_rate=args.learning_rate) # creating an instance of model
 
     # training the model
-    model.train(dataset, epochs=args.epochs, verbose=args.verbose, save_at=args.save_at)
+    model.train(dataset, epochs=args.epochs, verbose=args.verbose, save_at=args.save_at,cuda=args.cuda)
     # ------------------------------------------------------------
     pred = model.predict('hello')
     print(pred)
