@@ -60,7 +60,7 @@ cd Spectrum/AI
 
 # pass verbose, epochs, save_at arguments and run train.py 
 python3 train.py -h, --help  --epochs EPOCHS --save_at SAVE_AT --verbose VERBOSE --rnn_neurons RNN_NEURONS
-                 --embed_dim EMBED_DIM --dropout DROPOUT --num_layers NUM_LAYERS --learning_rate LEARNING_RATE
+             --embed_dim EMBED_DIM --dropout DROPOUT --num_layers NUM_LAYERS --learning_rate LEARNING_RATE
 ```
 All the arguments are optional if you leave them empty model will construct itself with the default params
 
